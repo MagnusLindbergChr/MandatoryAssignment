@@ -58,15 +58,52 @@ namespace MandatoryAssignmentPokemon
                         break;
 
                     case "fight":
-                        //PRINT INSTRUCTIONS AND POSSIBLE POKEMONS (SEE SLIDES FOR EXAMPLE OF EXECUTION)
-                        Console.Write("Choose who should fight\nstart by choosing the player\nYou kan choose the pokemons: {0}, {1} or {2}\n", Charmander.Name, Squirtle.Name, Bulbasaur.Name);
-
-                        //READ INPUT, REMEMBER IT SHOULD BE TWO POKEMON NAMES
-                        string input = Console.ReadLine();
-                        Console.WriteLine("You chose the pokemon " + input + " as the player");
                         //BE SURE TO CHECK THE POKEMON NAMES THE USER WROTE ARE VALID (IN THE ROSTER) AND IF THEY ARE IN FACT 2!
                         Pokemon player = null;
                         Pokemon enemy = null;
+
+                        while (player == null || enemy == null)
+                        {
+                            //PRINT INSTRUCTIONS AND POSSIBLE POKEMONS (SEE SLIDES FOR EXAMPLE OF EXECUTION)
+                            Console.Write("Choose who should fight\nYou can choose the pokemons: {0}, {1} or {2}\n", Charmander.Name, Squirtle.Name, Bulbasaur.Name);
+
+                            //READ INPUT, REMEMBER IT SHOULD BE TWO POKEMON NAMES
+                            string input = Console.ReadLine();
+                            string[] inputs = input.Split(" ");
+                            if (inputs.Length < 2)
+                            {
+                                Console.WriteLine("You haven't typed in two pokemons!");
+                            }
+                            else if (inputs.Length > 2)
+                            {
+                                Console.WriteLine("Only two pokemons at a time!");
+                            }
+                            else if (inputs[0] == inputs[1])
+                            {
+                                Console.WriteLine("You can't type in the same pokemon");
+                            }
+                            else
+                            {
+
+                                for (int i = 0; i < roster.Count; i++)
+                                {
+                                    if (roster[i].Name.Contains(inputs[0]))
+                                    {
+                                        player = roster[i];
+                                    }
+                                    else if (roster[i].Name.Contains(inputs[1]))
+                                    {
+                                        enemy = roster[i];
+                                    }
+                                }
+
+                                if (player == null || enemy == null)
+                                {
+                                    Console.WriteLine("I didn't understand that... try again");
+                                }
+                            }
+                        }
+                        
 
                         //if everything is fine and we have 2 pokemons let's make them fight
                         if (player != null && enemy != null && player != enemy)
@@ -78,7 +115,7 @@ namespace MandatoryAssignmentPokemon
                             while (player.Hp > 0 && enemy.Hp > 0)
                             {
                                 //PRINT POSSIBLE MOVES
-                                Console.Write("What move should we use? (");
+                                Console.Write("What move should we use?");
 
                                 //GET USER ANSWER, BE SURE TO CHECK IF IT'S A VALID MOVE, OTHERWISE ASK AGAIN
                                 int move = -1;
