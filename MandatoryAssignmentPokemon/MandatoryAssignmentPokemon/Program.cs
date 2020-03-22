@@ -110,7 +110,7 @@ namespace MandatoryAssignmentPokemon
                                 Console.Write("What move should we use? You can choose between the following:\n");
                                 for (int i = 0; i<player.Moves.Count; i++)
                                 {
-                                    Console.WriteLine($"{ i + 1}: {player.Moves[i].Name}");
+                                    Console.WriteLine($"{i}: {player.Moves[i].Name}");
                                 }
                                 Console.Write("Write the number of the move you want to use!\n");
 
@@ -118,12 +118,15 @@ namespace MandatoryAssignmentPokemon
                                 string MoveInput = Console.ReadLine();
                                 int move = -1;
                                 move = Convert.ToInt32(MoveInput);
-                                while (move > 0 && move < player.Moves.Count +1 )
+
+                                while (move >= 0 && move < player.Moves.Count)
                                 {
-                                    Console.WriteLine("You picked the move {0}", player.Moves[move - 1].Name);
+                                    Console.WriteLine("You picked the move {0}", player.Moves[move].Name);
 
                                     //CALCULATE AND APPLY DAMAGE
                                     int damage = -1;
+                                    damage = player.Attack(enemy);
+                                    enemy.ApplyDamage(damage);
 
                                     //print the move and damage
                                     Console.WriteLine(player.Name + " uses " + player.Moves[move].Name + ". " + enemy.Name + " loses " + damage + " HP");
@@ -139,13 +142,18 @@ namespace MandatoryAssignmentPokemon
                                          * where X is a number 
                                          */
                                         int enemyMove = -1;
+                                        enemyMove = rand.Next(enemy.Moves.Count);
                                         int enemyDamage = -1;
+                                        enemyDamage = enemy.Attack(player);
+                                        player.ApplyDamage(enemyDamage);
 
                                         //print the move and damage
                                         Console.WriteLine(enemy.Name + " uses " + enemy.Moves[enemyMove].Name + ". " + player.Name + " loses " + enemyDamage + " HP");
                                     }
+
+                                    break;
                                 }
-                                while(move <= 0 || move > player.Moves.Count)
+                                while(move < 0 || move > player.Moves.Count)
                                 {
                                     Console.WriteLine("Your pokemons doesn't have that move!\nPick a move that your pokemon has!");
                                     break;
