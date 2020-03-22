@@ -10,31 +10,18 @@ namespace MandatoryAssignmentPokemon
     {
         static void Main(string[] args)
         {
-            List<Move> CharmanderMoves = new List<Move>()
-            {
-                new Move("Ember"),
-                new Move("Fire Blast")
-            };
-            List<Move> SquirtleMoves = new List<Move>()
-            {
-                new Move("Bubble"),
-                new Move("Bite")
-            };
-            List<Move> BulbasaurMoves = new List<Move>()
-            {
-                new Move("Cut"),
-                new Move("Mega Drain"),
-                new Move("Razor Leaf")
-            };
+            // Making moves list
+            List<Move> moves = new List<Move>();
 
+            // Making roster list
             List<Pokemon> roster = new List<Pokemon>();
 
             // INITIALIZE YOUR THREE POKEMONS HERE
 
             // Initializing pokemons
-            Pokemon Charmander = new Pokemon("Charmander", 2, 52, 43, 39, Elements.Fire, CharmanderMoves);
-            Pokemon Squirtle = new Pokemon("Squirtle", 2, 48, 65, 44, Elements.Water, SquirtleMoves);
-            Pokemon Bulbasaur = new Pokemon("Bulbasaur", 3, 49, 49, 45, Elements.Grass, BulbasaurMoves);
+            Pokemon Charmander = new Pokemon("Charmander", 2, 52, 43, 39, Elements.Fire, new List<Move>() { new Move("Ember"), new Move("Fire Blast")});
+            Pokemon Squirtle = new Pokemon("Squirtle", 2, 48, 65, 44, Elements.Water, new List<Move>() { new Move("Bubble"), new Move("Bite") });
+            Pokemon Bulbasaur = new Pokemon("Bulbasaur", 3, 49, 49, 45, Elements.Grass, new List<Move>() { new Move("Cut"), new Move("Mega Drain"), new Move("Razor Leaf")});
 
             // Adding pokemons to roster list
             roster.Add(Charmander);
@@ -70,27 +57,32 @@ namespace MandatoryAssignmentPokemon
                             //READ INPUT, REMEMBER IT SHOULD BE TWO POKEMON NAMES
                             string input = Console.ReadLine();
                             string[] inputs = input.Split(" ");
+                            // If less than two pokemon are typed in
                             if (inputs.Length < 2)
                             {
                                 Console.WriteLine("You haven't typed in two pokemons!");
                             }
+                            // If more than two pokemons are typed in
                             else if (inputs.Length > 2)
                             {
                                 Console.WriteLine("Only two pokemons at a time!");
                             }
+                            // If the two pokemons typed in are the same
                             else if (inputs[0] == inputs[1])
                             {
                                 Console.WriteLine("You can't type in the same pokemon");
                             }
                             else
                             {
-
+                                // Looping through the roster
                                 for (int i = 0; i < roster.Count; i++)
                                 {
+                                    // If the first input matches -> Set as player
                                     if (roster[i].Name.Contains(inputs[0]))
                                     {
                                         player = roster[i];
                                     }
+                                    // If the second input matches -> Set as enemy
                                     else if (roster[i].Name.Contains(inputs[1]))
                                     {
                                         enemy = roster[i];
@@ -115,33 +107,49 @@ namespace MandatoryAssignmentPokemon
                             while (player.Hp > 0 && enemy.Hp > 0)
                             {
                                 //PRINT POSSIBLE MOVES
-                                Console.Write("What move should we use?");
+                                Console.Write("What move should we use? You can choose between the following:\n");
+                                for (int i = 0; i<player.Moves.Count; i++)
+                                {
+                                    Console.WriteLine($"{ i + 1}: {player.Moves[i].Name}");
+                                }
+                                Console.Write("Write the number of the move you want to use!\n");
 
                                 //GET USER ANSWER, BE SURE TO CHECK IF IT'S A VALID MOVE, OTHERWISE ASK AGAIN
+                                string MoveInput = Console.ReadLine();
                                 int move = -1;
-
-                                //CALCULATE AND APPLY DAMAGE
-                                int damage = -1;
-
-                                //print the move and damage
-                                Console.WriteLine(player.Name + " uses " + player.Moves[move].Name + ". " + enemy.Name + " loses " + damage + " HP");
-
-                                //if the enemy is not dead yet, it attacks
-                                if (enemy.Hp > 0)
+                                move = Convert.ToInt32(MoveInput);
+                                while (move > 0 && move < player.Moves.Count +1 )
                                 {
-                                    //CHOOSE A RANDOM MOVE BETWEEN THE ENEMY MOVES AND USE IT TO ATTACK THE PLAYER
-                                    Random rand = new Random();
-                                    /*the C# random is a bit different than the Unity random
-                                     * you can ask for a number between [0,X) (X not included) by writing
-                                     * rand.Next(X) 
-                                     * where X is a number 
-                                     */
-                                    int enemyMove = -1;
-                                    int enemyDamage = -1;
+                                    Console.WriteLine("You picked the move {0}", player.Moves[move - 1].Name);
+                                    //CALCULATE AND APPLY DAMAGE
+                                    int damage = -1;
 
                                     //print the move and damage
-                                    Console.WriteLine(enemy.Name + " uses " + enemy.Moves[enemyMove].Name + ". " + player.Name + " loses " + enemyDamage + " HP");
+                                    Console.WriteLine(player.Name + " uses " + player.Moves[move].Name + ". " + enemy.Name + " loses " + damage + " HP");
+
+                                    //if the enemy is not dead yet, it attacks
+                                    if (enemy.Hp > 0)
+                                    {
+                                        //CHOOSE A RANDOM MOVE BETWEEN THE ENEMY MOVES AND USE IT TO ATTACK THE PLAYER
+                                        Random rand = new Random();
+                                        /*the C# random is a bit different than the Unity random
+                                         * you can ask for a number between [0,X) (X not included) by writing
+                                         * rand.Next(X) 
+                                         * where X is a number 
+                                         */
+                                        int enemyMove = -1;
+                                        int enemyDamage = -1;
+
+                                        //print the move and damage
+                                        Console.WriteLine(enemy.Name + " uses " + enemy.Moves[enemyMove].Name + ". " + player.Name + " loses " + enemyDamage + " HP");
+                                    }
                                 }
+                                while(move <= 0 || move > player.Moves.Count)
+                                {
+                                    Console.WriteLine("Your pokemons doesn't have that move!\nPick a move that your pokemon has!");
+                                    break;
+                                }
+                                
                             }
                             //The loop is over, so either we won or lost
                             if (enemy.Hp <= 0)
