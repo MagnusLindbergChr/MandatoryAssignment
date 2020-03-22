@@ -58,7 +58,7 @@ namespace MandatoryAssignmentPokemon
             this.element = element;
             this.Moves = moves;
         }
-
+        
         /// <summary>
         /// performs an attack and returns total damage, check the slides for how to calculate the damage
         /// IMPORTANT: should also apply the damage to the enemy pokemon
@@ -67,7 +67,15 @@ namespace MandatoryAssignmentPokemon
         /// <returns>The amount of damage that was applied so we can print it for the user</returns>
         public int Attack(Pokemon enemy)
         {
-            throw new NotImplementedException();
+            int damageAmount = this.baseAttack * this.level;
+            int fullDamage = CalculateElementalEffects(damageAmount, enemy.element) - enemy.CalculateDefence();
+
+            if(fullDamage < 0)
+            {
+                fullDamage = 0;
+            }
+
+            return fullDamage;
         }
 
         /// <summary>
@@ -76,9 +84,10 @@ namespace MandatoryAssignmentPokemon
         /// <returns> returns the amount of defence points considering the level as well</returns>
         public int CalculateDefence()
         {
-            throw new NotImplementedException();
+            int defencePoints = this.baseDefence * this.level;
+            return defencePoints;
         }
-
+        
         /// <summary>
         /// Calculates elemental effect, check table at https://bulbapedia.bulbagarden.net/wiki/Type#Type_chart for a reference
         /// </summary>
@@ -87,7 +96,47 @@ namespace MandatoryAssignmentPokemon
         /// <returns>The damage post elemental-effect</returns>
         public int CalculateElementalEffects(int damage, Elements enemyType)
         {
-            throw new NotImplementedException();
+            int damageWithElementEffect = 0;
+
+            if (this.element == Elements.Fire)
+            {
+                if (enemyType == Elements.Grass)
+                {
+                    damageWithElementEffect = damage * 2;
+                }
+                else if (enemyType == Elements.Water)
+                {
+                    damageWithElementEffect = damage / 2;
+                }
+            }
+            else if(this.element == Elements.Grass)
+            {
+                if(enemyType == Elements.Fire)
+                {
+                    damageWithElementEffect = damage / 2;
+                }
+                else if(enemyType == Elements.Water)
+                {
+                    damageWithElementEffect = damage * 2;
+                }
+            }
+            else if(this.element == Elements.Water)
+            {
+                if(enemyType == Elements.Grass)
+                {
+                    damageWithElementEffect = damage / 2;
+                }
+                else if(enemyType == Elements.Fire)
+                {
+                    damageWithElementEffect = damage * 2;
+                }
+            }
+            else
+            {
+                damageWithElementEffect = damage;
+            }
+
+            return damageWithElementEffect;
         }
 
         /// <summary>
@@ -96,7 +145,7 @@ namespace MandatoryAssignmentPokemon
         /// <param name="damage"></param>
         public void ApplyDamage(int damage)
         {
-            throw new NotImplementedException();
+            hp -= damage;
         }
 
         /// <summary>
