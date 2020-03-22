@@ -121,6 +121,7 @@ namespace MandatoryAssignmentPokemon
                                 while (move > 0 && move < player.Moves.Count +1 )
                                 {
                                     Console.WriteLine("You picked the move {0}", player.Moves[move - 1].Name);
+
                                     //CALCULATE AND APPLY DAMAGE
                                     int damage = -1;
 
