@@ -48,57 +48,60 @@ namespace MandatoryAssignmentPokemon
                         //BE SURE TO CHECK THE POKEMON NAMES THE USER WROTE ARE VALID (IN THE ROSTER) AND IF THEY ARE IN FACT 2!
                         Pokemon player = null;
                         Pokemon enemy = null;
-
-                        while (player == null || enemy == null)
+                        bool canFight = false;
+                        while (canFight == false)
                         {
-                            //PRINT INSTRUCTIONS AND POSSIBLE POKEMONS (SEE SLIDES FOR EXAMPLE OF EXECUTION)
-                            Console.Write("Choose who should fight\nYou can choose the pokemons: {0}, {1} or {2}\n", Charmander.Name, Squirtle.Name, Bulbasaur.Name);
+                            while (player == null || enemy == null)
+                            {
+                                //PRINT INSTRUCTIONS AND POSSIBLE POKEMONS (SEE SLIDES FOR EXAMPLE OF EXECUTION)
+                                Console.Write("Choose who should fight\nYou can choose the pokemons: {0}, {1} or {2}\n", Charmander.Name, Squirtle.Name, Bulbasaur.Name);
 
-                            //READ INPUT, REMEMBER IT SHOULD BE TWO POKEMON NAMES
-                            string input = Console.ReadLine();
-                            string[] inputs = input.Split(" ");
-                            // If less than two pokemon are typed in
-                            if (inputs.Length < 2)
-                            {
-                                Console.WriteLine("You haven't typed in two pokemons!");
-                            }
-                            // If more than two pokemons are typed in
-                            else if (inputs.Length > 2)
-                            {
-                                Console.WriteLine("Only two pokemons at a time!");
-                            }
-                            // If the two pokemons typed in are the same
-                            else if (inputs[0] == inputs[1])
-                            {
-                                Console.WriteLine("You can't type in the same pokemon");
-                            }
-                            else
-                            {
-                                // Looping through the roster
-                                for (int i = 0; i < roster.Count; i++)
+                                //READ INPUT, REMEMBER IT SHOULD BE TWO POKEMON NAMES
+                                string input = Console.ReadLine();
+                                string[] inputs = input.Split(" ");
+                                // If less than two pokemon are typed in
+                                if (inputs.Length < 2)
                                 {
-                                    // If the first input matches -> Set as player
-                                    if (roster[i].Name.Contains(inputs[0]))
-                                    {
-                                        player = roster[i];
-                                    }
-                                    // If the second input matches -> Set as enemy
-                                    else if (roster[i].Name.Contains(inputs[1]))
-                                    {
-                                        enemy = roster[i];
-                                    }
+                                    Console.WriteLine("You haven't typed in two pokemons!");
                                 }
-
-                                if (player == null || enemy == null)
+                                // If more than two pokemons are typed in
+                                else if (inputs.Length > 2)
                                 {
-                                    Console.WriteLine("I didn't understand that... try again");
+                                    Console.WriteLine("Only two pokemons at a time!");
+                                }
+                                // If the two pokemons typed in are the same
+                                else if (inputs[0] == inputs[1])
+                                {
+                                    Console.WriteLine("You can't type in the same pokemon");
+                                }
+                                else
+                                {
+                                    // Looping through the roster
+                                    for (int i = 0; i < roster.Count; i++)
+                                    {
+                                            // If the first input matches -> Set as player
+                                            if (roster[i].Name.Contains(inputs[0]))
+                                            {
+                                                player = roster[i];
+                                            }
+                                            // If the second input matches -> Set as enemy
+                                            else if (roster[i].Name.Contains(inputs[1]))
+                                            {
+                                                enemy = roster[i];
+                                            }                                    }
+
+                                    if (player == null || enemy == null)
+                                    {
+                                        Console.WriteLine("I didn't understand that... try again");
+                                    }
                                 }
                             }
                         }
-                        
+
+
 
                         //if everything is fine and we have 2 pokemons let's make them fight
-                        if (player != null && enemy != null && player != enemy)
+                        if (player != null && enemy != null && player != enemy && canFight == true)
                         {
                             Console.WriteLine("A wild " + enemy.Name + " appears!");
                             Console.Write(player.Name + " I choose you! ");
@@ -117,7 +120,14 @@ namespace MandatoryAssignmentPokemon
                                 //GET USER ANSWER, BE SURE TO CHECK IF IT'S A VALID MOVE, OTHERWISE ASK AGAIN
                                 string MoveInput = Console.ReadLine();
                                 int move = -1;
-                                move = Convert.ToInt32(MoveInput);
+                                if (string.IsNullOrEmpty(MoveInput))
+                                {
+
+                                }
+                                else
+                                {
+                                    move = Convert.ToInt32(MoveInput);
+                                }
 
                                 while (move >= 0 && move < player.Moves.Count)
                                 {
@@ -171,15 +181,19 @@ namespace MandatoryAssignmentPokemon
                             }
                         }
                         //otherwise let's print an error message
-                        else
+                        
+                        /*else 
                         {
                             Console.WriteLine("Invalid pokemons");
-                        }
+                        }*/
                         break;
 
                     case "heal":
                         //RESTORE ALL POKEMONS IN THE ROSTER
-
+                        for(int i = 0; i<roster.Count; i++)
+                        {
+                            roster[i].Restore();
+                        }
                         Console.WriteLine("All pokemons have been healed");
                         break;
 
